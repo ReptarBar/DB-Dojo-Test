@@ -1,0 +1,105 @@
+# name: dojo_levels.test
+# group: [sql]
+
+# This test file assumes the extension is linked into the test runner (as per the DuckDB extension template).
+
+require dojo
+
+# --- dojo_setup: creates the practice dataset in-session ---
+statement error
+SELECT COUNT(*) FROM ducklings;
+
+query I
+SELECT message FROM dojo_setup();
+----
+Ducklings dataset loaded as TEMP table 'ducklings' (name, color, age).
+
+query I
+SELECT COUNT(*) FROM ducklings;
+----
+12
+
+# --- sanity: task registry ---
+query I
+SELECT COUNT(*) FROM dojo_tasks();
+----
+12
+
+# Ensure we can fetch a hint (Level 1, hint 1)
+query I
+SELECT dojo_hint(1, 1) IS NOT NULL;
+----
+true
+
+# --- Level 1: pass ---
+query I
+SELECT ok FROM dojo_check(
+  1,
+  $$SELECT name
+    FROM ducklings
+    WHERE color = 'yellow' AND age < 5
+    ORDER BY age ASC
+    LIMIT 3$$
+);
+----
+true
+
+# --- Level 1: fail (wrong ORDER BY) ---
+query I
+SELECT ok FROM dojo_check(
+  1,
+  $$SELECT name
+    FROM ducklings
+    WHERE color = 'yellow' AND age < 5
+    ORDER BY age DESC
+    LIMIT 3$$
+);
+----
+false
+
+# Error message should mention ORDER BY guidance for order-sensitive tasks
+query I
+SELECT strpos(message, 'ORDER BY') > 0 FROM dojo_check(
+  1,
+  $$SELECT name
+    FROM ducklings
+    WHERE color = 'yellow' AND age < 5
+    ORDER BY age DESC
+    LIMIT 3$$
+);
+----
+true
+
+# --- Level 1: fail (too many rows, missing LIMIT) ---
+query I
+SELECT ok FROM dojo_check(
+  1,
+  $$SELECT name
+    FROM ducklings
+    WHERE color = 'yellow' AND age < 5
+    ORDER BY age ASC$$
+);
+----
+false
+
+# --- Level 8: order-insensitive check (no ORDER BY, should still pass) ---
+query I
+SELECT ok FROM dojo_check(
+  8,
+  $$SELECT color, COUNT(*) AS count
+    FROM ducklings
+    GROUP BY color$$
+);
+----
+true
+
+# --- Column-name enforcement example (Level 7 expects column named 'count') ---
+query I
+SELECT ok FROM dojo_check(
+  7,
+  $$SELECT COUNT(*)
+    FROM ducklings
+    WHERE color = 'yellow'$$
+);
+----
+false

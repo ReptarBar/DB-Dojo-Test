@@ -1,0 +1,252 @@
+[
+  {
+    "task_id": 1,
+    "level": 1,
+    "title": "The Yellow Sprint",
+    "topic": "Filtering + Sorting + Limiting",
+    "difficulty": 1,
+    "goal": "Find the names of ducklings that are yellow and younger than 5. Sort by age, youngest first. Show only the first 3 names.",
+    "badge": "WHERE + AND + ORDER BY + LIMIT",
+    "expected_columns": [
+      "name"
+    ],
+    "max_rows": 3,
+    "requires_order": true,
+    "hints": [
+      "Start with SELECT name FROM ducklings",
+      "Filter with WHERE color = 'yellow'",
+      "Add age condition with AND age < 5",
+      "Sort with ORDER BY age ASC",
+      "Cap results with LIMIT 3"
+    ],
+    "expected_sql": "SELECT name\nFROM ducklings\nWHERE color = 'yellow'\n  AND age < 5\nORDER BY age ASC, name ASC\nLIMIT 3;"
+  },
+  {
+    "task_id": 2,
+    "level": 2,
+    "title": "Youngest in the Flock",
+    "topic": "Sorting + Top-1",
+    "difficulty": 1,
+    "goal": "Which duck is the youngest overall? Show their name only. Sort by age, youngest first, return only one row.",
+    "badge": "ORDER BY ASC",
+    "expected_columns": [
+      "name"
+    ],
+    "max_rows": 1,
+    "requires_order": true,
+    "hints": [
+      "SELECT name FROM ducklings",
+      "Sort by smallest age: ORDER BY age ASC",
+      "Return one row: LIMIT 1"
+    ],
+    "expected_sql": "SELECT name\nFROM ducklings\nORDER BY age ASC, name ASC\nLIMIT 1;"
+  },
+  {
+    "task_id": 3,
+    "level": 3,
+    "title": "Elder of the Pond",
+    "topic": "Sorting + Top-1",
+    "difficulty": 1,
+    "goal": "Find the oldest duck in the pond and show their name only. Sort by age, oldest first, return only one row.",
+    "badge": "ORDER BY DESC",
+    "expected_columns": [
+      "name"
+    ],
+    "max_rows": 1,
+    "requires_order": true,
+    "hints": [
+      "SELECT name FROM ducklings",
+      "Sort by largest age: ORDER BY age DESC",
+      "Return one row: LIMIT 1"
+    ],
+    "expected_sql": "SELECT name\nFROM ducklings\nORDER BY age DESC, name ASC\nLIMIT 1;"
+  },
+  {
+    "task_id": 4,
+    "level": 4,
+    "title": "Golden Roll Call",
+    "topic": "Filtering + Sorting by Another Column",
+    "difficulty": 2,
+    "goal": "Find yellow ducklings that are age 3 or older. Sort by name A to Z. Show only the first 2 names.",
+    "badge": "Sorting by a different column",
+    "expected_columns": [
+      "name"
+    ],
+    "max_rows": 2,
+    "requires_order": true,
+    "hints": [
+      "SELECT name FROM ducklings",
+      "WHERE color = 'yellow'",
+      "Add age threshold: AND age >= 3",
+      "Sort alphabetically: ORDER BY name ASC",
+      "LIMIT 2"
+    ],
+    "expected_sql": "SELECT name\nFROM ducklings\nWHERE color = 'yellow'\n  AND age >= 3\nORDER BY name ASC\nLIMIT 2;"
+  },
+  {
+    "task_id": 5,
+    "level": 5,
+    "title": "Fastest Waddlers",
+    "topic": "Top-N",
+    "difficulty": 2,
+    "goal": "Show the names of the 4 youngest ducklings, any color. Sort by age, youngest first.",
+    "badge": "Top-N results",
+    "expected_columns": [
+      "name"
+    ],
+    "max_rows": 4,
+    "requires_order": true,
+    "hints": [
+      "SELECT name FROM ducklings",
+      "ORDER BY age ASC",
+      "LIMIT 4"
+    ],
+    "expected_sql": "SELECT name\nFROM ducklings\nORDER BY age ASC, name ASC\nLIMIT 4;"
+  },
+  {
+    "task_id": 6,
+    "level": 6,
+    "title": "The Between Pond",
+    "topic": "Range Filtering",
+    "difficulty": 2,
+    "goal": "Find ducklings aged 2 through 4 (inclusive). Sort by age, youngest first. Show only the first 5 names.",
+    "badge": "Range filtering (BETWEEN)",
+    "expected_columns": [
+      "name"
+    ],
+    "max_rows": 5,
+    "requires_order": true,
+    "hints": [
+      "SELECT name FROM ducklings",
+      "Range filter: WHERE age >= 2 AND age <= 4",
+      "Alternative (also valid): WHERE age BETWEEN 2 AND 4",
+      "ORDER BY age ASC",
+      "LIMIT 5"
+    ],
+    "expected_sql": "SELECT name\nFROM ducklings\nWHERE age BETWEEN 2 AND 4\nORDER BY age ASC, name ASC\nLIMIT 5;"
+  },
+  {
+    "task_id": 7,
+    "level": 7,
+    "title": "Count the Yellow",
+    "topic": "Aggregates",
+    "difficulty": 3,
+    "goal": "How many ducklings are yellow? Return a single number.",
+    "badge": "COUNT(*)",
+    "expected_columns": [
+      "count"
+    ],
+    "max_rows": 1,
+    "requires_order": false,
+    "hints": [
+      "Use an aggregate: SELECT COUNT(*) AS count",
+      "From the table: FROM ducklings",
+      "Filter to yellow: WHERE color = 'yellow'"
+    ],
+    "expected_sql": "SELECT COUNT(*) AS count\nFROM ducklings\nWHERE color = 'yellow';"
+  },
+  {
+    "task_id": 8,
+    "level": 8,
+    "title": "Color Census",
+    "topic": "GROUP BY",
+    "difficulty": 3,
+    "goal": "Show how many ducklings there are of each color. Return color and count, highest count first.",
+    "badge": "GROUP BY + Aggregates",
+    "expected_columns": [
+      "color",
+      "count"
+    ],
+    "max_rows": 4,
+    "requires_order": false,
+    "hints": [
+      "Select the group key + aggregate: SELECT color, COUNT(*) AS count",
+      "Group rows: FROM ducklings GROUP BY color",
+      "Sort by count: ORDER BY count DESC"
+    ],
+    "expected_sql": "SELECT color, COUNT(*) AS count\nFROM ducklings\nGROUP BY color\nORDER BY count DESC, color ASC;"
+  },
+  {
+    "task_id": 9,
+    "level": 9,
+    "title": "Popular Colors Only",
+    "topic": "HAVING",
+    "difficulty": 4,
+    "goal": "Show only colors that have at least 3 ducklings. Return color and count, highest count first.",
+    "badge": "HAVING",
+    "expected_columns": [
+      "color",
+      "count"
+    ],
+    "max_rows": 2,
+    "requires_order": false,
+    "hints": [
+      "Start from Level 8 (group by color with count)",
+      "Filter groups using HAVING COUNT(*) >= 3",
+      "ORDER BY count DESC"
+    ],
+    "expected_sql": "SELECT color, COUNT(*) AS count\nFROM ducklings\nGROUP BY color\nHAVING COUNT(*) >= 3\nORDER BY count DESC, color ASC;"
+  },
+  {
+    "task_id": 10,
+    "level": 10,
+    "title": "The Approved Palette",
+    "topic": "IN",
+    "difficulty": 4,
+    "goal": "Show duckling names where color is either yellow or brown. Sort by name A to Z.",
+    "badge": "IN (...)",
+    "expected_columns": [
+      "name"
+    ],
+    "max_rows": 9,
+    "requires_order": true,
+    "hints": [
+      "SELECT name FROM ducklings",
+      "Use IN: WHERE color IN ('yellow', 'brown')",
+      "ORDER BY name ASC"
+    ],
+    "expected_sql": "SELECT name\nFROM ducklings\nWHERE color IN ('yellow', 'brown')\nORDER BY name ASC;"
+  },
+  {
+    "task_id": 11,
+    "level": 11,
+    "title": "Names That Start With D",
+    "topic": "LIKE",
+    "difficulty": 4,
+    "goal": "Find ducklings whose names start with the letter \u201cD\u201d. Sort by name A to Z.",
+    "badge": "LIKE patterns",
+    "expected_columns": [
+      "name"
+    ],
+    "max_rows": 3,
+    "requires_order": true,
+    "hints": [
+      "SELECT name FROM ducklings",
+      "Pattern match: WHERE name LIKE 'D%'",
+      "ORDER BY name ASC"
+    ],
+    "expected_sql": "SELECT name\nFROM ducklings\nWHERE name LIKE 'D%'\nORDER BY name ASC;"
+  },
+  {
+    "task_id": 12,
+    "level": 12,
+    "title": "Age Rank Parade",
+    "topic": "Window Functions",
+    "difficulty": 5,
+    "goal": "Show each duckling\u2019s name, age, and their rank by age (youngest = 1). Sort by rank, then name.",
+    "badge": "Window Functions (ROW_NUMBER)",
+    "expected_columns": [
+      "name",
+      "age",
+      "age_rank"
+    ],
+    "max_rows": 12,
+    "requires_order": true,
+    "hints": [
+      "You need a window function: ROW_NUMBER() OVER (ORDER BY age ASC)",
+      "Select fields: SELECT name, age, ROW_NUMBER() OVER (...) AS age_rank",
+      "Sort results: ORDER BY age_rank ASC, name ASC"
+    ],
+    "expected_sql": "SELECT\n  name,\n  age,\n  ROW_NUMBER() OVER (ORDER BY age ASC, name ASC) AS age_rank\nFROM ducklings\nORDER BY age_rank ASC, name ASC;"
+  }
+]

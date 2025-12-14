@@ -1,0 +1,5 @@
+SELECT name
+FROM ducklings
+WHERE age BETWEEN 2 AND 4
+ORDER BY age ASC, name ASC
+LIMIT 5;
